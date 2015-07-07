@@ -13,20 +13,34 @@
     <div class="navbar-inner">
     	<div class="container">
     		<%=link_to "FirstApp","#",id:"logo" %>
-    	</div>
+        <nav>
+          <ul class="nav pull-right">
+            <li><%= link_to "Home", '#' %>
+            <% if signed_in? %>
+              <li><%= link_to "Users", '#' %>
+                <li id="fat-menu" class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <%= current_user.name %> <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                  <li><%= link_to "Profile", current_user %></li>
+                  <li><%= link_to "Settings", '#' %></li>
+                  <li class="divider"></li>
+                  <li>
+                  <%= link_to "Sign_out", session_path, method: "delete" %>
+                  </li>
+                 </ul> 
+                </li>
+               <% else %>
+                <li><%= link_to "Sign_in", new_session_path %></li>
+               <% end %>
+              </ul>
+             </nav>       
+    	</div>   
     </div>	
 </header>
 
 <!-- Content wrapped in container -->
-
-<div class="container">
-  <% flash.each do |key, value| %>
-    <div class="alert alert-<%= key %>"><%= value %></div>
-  <% end %>
- <%= yield %>
-  <%= render :partial => "layouts/_footer" %>
-  <%= debug(params) if Rails.env.development? %>
-</div>
 
 <div class="container">
 	<%= yield %>
@@ -39,6 +53,20 @@
 <!-- Debugging footer -->
 <%= debug(params) if Rails.env.development? %>
 </div>
+
+<% if not @messages_rendered -%>
+  <% if flash[:error] -%>
+    <p class='error'><%=h flash[:error] %></p>
+  <% end -%>
+  <% if flash[:notice] -%>
+    <p class='notice'><%=h flash[:notice] %></p>
+  <% end -%>
+  <% if flash[:success] -%>
+    <p class='notice'><%=h flash[:success] %></p>
+  <% end -%>
+<% end -%>
+<% @messages_rendered = true -%>
+
 
 </body>
 </html>

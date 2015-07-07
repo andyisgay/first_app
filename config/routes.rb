@@ -1,6 +1,11 @@
 FirstApp::Application.routes.draw do
+  #get "sessions/new"
+  #get "sessions/create"
+  #get "sessions/destroy"
   resources :users
+  resource :session, only: [ :new, :create, :destroy ]
   #This maps / to the root#home action
+  get '/sandbox', to: 'root#sandbox' if Rails.env.development?
   root to:'root#home'
 
 
@@ -26,7 +31,7 @@ FirstApp::Application.routes.draw do
   #       post 'toggle'
   #     end
   #
-  #     collection do
+  #     collection do 
   #       get 'sold'
   #     end
   #   end
